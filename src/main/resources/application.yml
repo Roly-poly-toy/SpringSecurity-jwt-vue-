@@ -74,8 +74,8 @@ spring:
           enable: true
 
 mybatis:
-  type-aliases-package: com.example.demo.pojo
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: per.wxl.myBlog.model
+  mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
     lazy-loading-enabled: true

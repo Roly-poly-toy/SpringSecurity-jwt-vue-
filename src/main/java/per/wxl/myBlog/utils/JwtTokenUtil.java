@@ -1,5 +1,6 @@
 package per.wxl.myBlog.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,28 @@ public class JwtTokenUtil {
         redisTemplate.opsForValue().set(JwtConfig.REDIS_TOKEN_KEY_PREFIX+username
         ,jwtConfig.getPrefix()+token,jwtConfig.getTime(), TimeUnit.SECONDS);
         return token;
+    }
+
+    public String getUsernameFromToken(String authToken) {
+        Claims claims=getClaimsFromToken(authToken);
+        return (String) claims.get("username");
+    }
+
+    private Claims getClaimsFromToken(String token){
+        Claims claims;
+        try {
+            claims=Jwts.parser()
+                    .setSigningKey(jwtConfig.getSecret())
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch (Exception e){
+            claims=null;
+        }
+        return claims;
+    }
+
+    public List<String> getRolesFromToken(String authToken) {
+        Claims claims=getClaimsFromToken(authToken);
+        return (List<String>) claims.get("roles");
     }
 }

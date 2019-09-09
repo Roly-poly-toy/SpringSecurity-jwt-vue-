@@ -17,4 +17,8 @@ public class MyUserDetails extends User {
                 , user.isUserStatus(), authorities);
         this.userPhoto=user.getUserPhoto();
     }
+
+    public MyUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+    }
 }
