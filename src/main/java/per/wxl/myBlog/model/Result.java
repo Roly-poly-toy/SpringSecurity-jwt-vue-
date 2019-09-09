@@ -13,6 +13,11 @@ public class Result {
     public Result() {
     }
 
+    public Result(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
     public Result(Integer code, String message, Object data) {
         this.code = code;
         this.message = message;

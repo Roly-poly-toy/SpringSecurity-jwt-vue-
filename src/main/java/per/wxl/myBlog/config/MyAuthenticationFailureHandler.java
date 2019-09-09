@@ -20,7 +20,7 @@ import java.io.IOException;
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        Result result=new Result(400,e.getMessage(),null);
+        Result result=new Result(400,e.getMessage());
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }

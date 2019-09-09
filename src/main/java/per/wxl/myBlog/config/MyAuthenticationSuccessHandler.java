@@ -27,7 +27,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     JwtTokenUtil jwtTokenUtil;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        Result result=new Result(200,"登陆成功",null);
+        Result result=new Result(200,"登陆成功");
         MyUserDetails myUserDetails= (MyUserDetails) authentication.getPrincipal();
         Map<String,Object> map=new HashMap<>(2);
         map.put("user",myUserDetails);

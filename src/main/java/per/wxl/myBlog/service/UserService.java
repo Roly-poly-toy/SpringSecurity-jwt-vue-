@@ -1,5 +1,6 @@
 package per.wxl.myBlog.service;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import per.wxl.myBlog.config.EmailConfig;
 import per.wxl.myBlog.config.JwtConfig;
 import per.wxl.myBlog.dao.RoleDao;
 import per.wxl.myBlog.dao.UserDao;
@@ -16,8 +18,8 @@ import per.wxl.myBlog.model.Role;
 import per.wxl.myBlog.model.User;
 import per.wxl.myBlog.utils.JwtTokenUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Auther: wxl
@@ -37,6 +39,10 @@ public class UserService implements UserDetailsService {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private EmailConfig emailConfig;
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user=userDao.getUserByUsername(s);
@@ -59,5 +65,26 @@ public class UserService implements UserDetailsService {
         for(String role:roles)
             authorities.add(new SimpleGrantedAuthority(role));
         return new MyUserDetails(username,null,authorities);
+    }
+
+    public void sendEmail(String email) {
+        int random= (int) (100000+Math.random()*900000);
+        String code=String.valueOf(random);
+        redisTemplate.opsForValue().set(emailConfig.getPrefix()+email,code,emailConfig.getExpiredTime(), TimeUnit.MINUTES);
+        Map<String,String> map=new HashMap<>(2);
+        map.put("email",email);
+        map.put("code",code);
+        rabbitTemplate.convertAndSend("wxl_account","Email",map);
+    }
+
+    public int register(User user, String mailCode, String inviteCode) {
+        if(!getMailCodeFromRedis(user.getUserEmail()).equals(mailCode)) return 1;
+       // if(userDao.getUserByEmail(user.getUserEmail())!=null) return 2;
+        if(userDao.getUserByUsername(user.getUserName())!=null) return 4;
+        return 0;
+    }
+
+    public String getMailCodeFromRedis(String email){
+        return (String) redisTemplate.opsForValue().get(emailConfig.getPrefix()+email);
     }
 }

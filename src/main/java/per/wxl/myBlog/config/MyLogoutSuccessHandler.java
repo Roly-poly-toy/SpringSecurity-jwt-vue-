@@ -20,7 +20,7 @@ import java.io.IOException;
 public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        Result result=new Result(100,"成功退出",null);
+        Result result=new Result(100,"成功退出");
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }

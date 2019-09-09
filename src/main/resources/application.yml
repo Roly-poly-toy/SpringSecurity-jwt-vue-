@@ -87,5 +87,9 @@ jwt:
   prefix: "Bearer "
   header: "Authorization"
 
+Email:
+  prefix: "MAIL_"
+  expiredTime: 5
+
 
 
