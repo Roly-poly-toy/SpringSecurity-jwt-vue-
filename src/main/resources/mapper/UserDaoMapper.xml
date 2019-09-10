@@ -8,4 +8,12 @@
         select * from user where user_name=#{username}
     </select>
 
+    <select id="getUserByEmail" resultType="User">
+        select * from user where user_email=#{userEmail}
+    </select>
+
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into user(user_name, user_password, user_email, user_status)
+        values (#{userName},#{userPassword},#{userEmail},#{userStatus},#{user})
+    </insert>
 </mapper>

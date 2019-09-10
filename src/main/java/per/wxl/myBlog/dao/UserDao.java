@@ -8,5 +8,9 @@ import per.wxl.myBlog.model.User;
  * @Description:
  */
 public interface UserDao {
-    public User getUserByUsername(String username);
+    User getUserByUsername(String username);
+
+    User getUserByEmail(String userEmail);
+
+    void saveUser(User user);
 }

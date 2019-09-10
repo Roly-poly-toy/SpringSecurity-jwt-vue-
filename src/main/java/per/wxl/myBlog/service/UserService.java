@@ -7,12 +7,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import per.wxl.myBlog.config.EmailConfig;
 import per.wxl.myBlog.config.JwtConfig;
+import per.wxl.myBlog.dao.CodeDao;
 import per.wxl.myBlog.dao.RoleDao;
 import per.wxl.myBlog.dao.UserDao;
+import per.wxl.myBlog.model.Code;
 import per.wxl.myBlog.model.MyUserDetails;
 import per.wxl.myBlog.model.Role;
 import per.wxl.myBlog.model.User;
@@ -34,6 +37,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private RoleDao roleDao;
     @Autowired
+    private CodeDao codeDao;
+    @Autowired
     private JwtConfig jwtConfig;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -43,6 +48,8 @@ public class UserService implements UserDetailsService {
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private EmailConfig emailConfig;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user=userDao.getUserByUsername(s);
@@ -77,10 +84,27 @@ public class UserService implements UserDetailsService {
         rabbitTemplate.convertAndSend("wxl_account","Email",map);
     }
 
+    public boolean checkEmailCode(String email,String code){
+        String real=getMailCodeFromRedis(email);
+        if(real==null||!code.equals(real)) return false;
+        else return true;
+    }
+    /*
+      * 返回0代表注册成功  1 邮件验证码不正确 2 邮箱已被注册 3 邀请码错误 4 用户名已存在
+     */
     public int register(User user, String mailCode, String inviteCode) {
-        if(!getMailCodeFromRedis(user.getUserEmail()).equals(mailCode)) return 1;
-       // if(userDao.getUserByEmail(user.getUserEmail())!=null) return 2;
-        if(userDao.getUserByUsername(user.getUserName())!=null) return 4;
+        if(!checkEmailCode(user.getUserEmail(),mailCode)) return 1;
+        if(userDao.getUserByEmail(user.getUserEmail())==null) return 2;
+        Code code=codeDao.getCodeByCodeId(inviteCode);
+        if(code==null) return 3;
+        if(userDao.getUserByUsername(user.getUserName())==null) return 4;
+        String password=user.getUserPassword();
+        user.setUserStatus(true);
+        user.setUserPassword(encoder.encode(password));
+        userDao.saveUser(user);
+        code.setCodeStatus(1);
+        code.setUser(user);
+        codeDao.updateCode(code);
         return 0;
     }
 

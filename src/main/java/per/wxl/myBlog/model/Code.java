@@ -4,7 +4,7 @@ package per.wxl.myBlog.model;
 public class Code {
 
   private String codeId;
-  private long codeStatus;
+  private Integer codeStatus;
   private User user;
 
 
@@ -17,14 +17,13 @@ public class Code {
   }
 
 
-  public long getCodeStatus() {
+  public Integer getCodeStatus() {
     return codeStatus;
   }
 
-  public void setCodeStatus(long codeStatus) {
+  public void setCodeStatus(Integer codeStatus) {
     this.codeStatus = codeStatus;
   }
-
 
   public User getUser() {
     return user;
