@@ -2,10 +2,7 @@ package per.wxl.myBlog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import per.wxl.myBlog.config.EmailConfig;
 import per.wxl.myBlog.model.Result;
 import per.wxl.myBlog.model.User;
@@ -17,6 +14,7 @@ import per.wxl.myBlog.utils.DataCheckUtil;
  * @Date: 2019/9/7 17:57
  * @Description:
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -53,7 +51,7 @@ public class UserController {
             }else return new Result(200,"注册成功，请前往登录");
         }
     }
-
+    @CrossOrigin
     @PostMapping("/sendEmail")
     public Result sendEmail(String email){
         if(!DataCheckUtil.checkStringNull(email)||!DataCheckUtil.checkEmail(email))

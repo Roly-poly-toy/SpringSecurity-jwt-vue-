@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
         Map<String,String> map=new HashMap<>(2);
         map.put("email",email);
         map.put("code",code);
-        rabbitTemplate.convertAndSend("wxl_account","Email",map);
+        rabbitTemplate.convertAndSend("wxl.account","Email",map);
     }
 
     public boolean checkEmailCode(String email,String code){
@@ -94,10 +94,10 @@ public class UserService implements UserDetailsService {
      */
     public int register(User user, String mailCode, String inviteCode) {
         if(!checkEmailCode(user.getUserEmail(),mailCode)) return 1;
-        if(userDao.getUserByEmail(user.getUserEmail())==null) return 2;
+        if(userDao.getUserByEmail(user.getUserEmail())!=null) return 2;
         Code code=codeDao.getCodeByCodeId(inviteCode);
         if(code==null) return 3;
-        if(userDao.getUserByUsername(user.getUserName())==null) return 4;
+        if(userDao.getUserByUsername(user.getUserName())!=null) return 4;
         String password=user.getUserPassword();
         user.setUserStatus(true);
         user.setUserPassword(encoder.encode(password));

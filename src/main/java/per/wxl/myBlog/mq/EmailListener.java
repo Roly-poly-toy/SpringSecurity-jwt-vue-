@@ -40,6 +40,7 @@ public class EmailListener {
         message.setTo(email);
         message.setSubject("myBlog_邮箱验证码");
         message.setText("邮箱验证码："+code+"，"+expiredTime+"分钟内有效");
+        javaMailSender.send(message);
     }
 
 }
