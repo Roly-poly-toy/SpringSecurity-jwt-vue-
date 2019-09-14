@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.wxl.myBlog.dao.BlogDao">
+
+
+    <insert id="saveBlog" useGeneratedKeys="true" keyProperty="blogId">
+        insert into blog
+        values(#{blog.blogTitle},#{blog.blogBody},
+        #{blog.blogDiscussCount},#{blog.blogState},#{blog.userId},#{blog.blogTime})
+    </insert>
+
+    <insert id="saveBlogTag">
+        insert into blog_tag values(#{blogId},#{tagId})
+    </insert>
+
+</mapper>
