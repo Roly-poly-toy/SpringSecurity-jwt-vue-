@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class MyUserDetails extends User {
     private String userPhoto;
-    //TODO
+
     private List<String> roles;
     public MyUserDetails(per.wxl.myBlog.model.User user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUserName(), user.getUserPassword(), user.isUserStatus(), true, true
