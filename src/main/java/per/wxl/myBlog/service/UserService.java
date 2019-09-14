@@ -51,8 +51,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder encoder;
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user=userDao.getUserByUsername(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user=userDao.getUserByUsername(username);
         if(user==null)
             throw new UsernameNotFoundException("不存在此用户！");
         List<Role> roles=roleDao.getRolesByUserId(user.getUserId());
@@ -66,12 +66,12 @@ public class UserService implements UserDetailsService {
         String username=jwtTokenUtil.getUsernameFromToken(authToken);
         if(username==null) return null;
         String redisToken= (String) redisTemplate.opsForValue().get(JwtConfig.REDIS_TOKEN_KEY_PREFIX+username);
-        if(redisToken==null||!redisToken.equals(authToken)) return null;
+        if(redisToken==null||!redisToken.equals(token)) return null;
         List<String> roles=jwtTokenUtil.getRolesFromToken(authToken);
         List<SimpleGrantedAuthority> authorities=new ArrayList<>();
         for(String role:roles)
             authorities.add(new SimpleGrantedAuthority(role));
-        return new MyUserDetails(username,null,authorities);
+        return new MyUserDetails(username,"****",authorities);
     }
 
     public void sendEmail(String email) {
@@ -96,7 +96,7 @@ public class UserService implements UserDetailsService {
         if(!checkEmailCode(user.getUserEmail(),mailCode)) return 1;
         if(userDao.getUserByEmail(user.getUserEmail())!=null) return 2;
         Code code=codeDao.getCodeByCodeId(inviteCode);
-        if(code==null) return 3;
+        if(code==null||code.getCodeStatus()!=0) return 3;
         if(userDao.getUserByUsername(user.getUserName())!=null) return 4;
         String password=user.getUserPassword();
         user.setUserStatus(true);
@@ -110,5 +110,9 @@ public class UserService implements UserDetailsService {
 
     public String getMailCodeFromRedis(String email){
         return (String) redisTemplate.opsForValue().get(emailConfig.getPrefix()+email);
+    }
+
+    public void updateUserStatusByName(String username, boolean b) {
+        userDao.updateUserStatusByName(username,b);
     }
 }

@@ -14,6 +14,10 @@
 
     <insert id="saveUser" useGeneratedKeys="true" keyProperty="userId">
         insert into user(user_name, user_password, user_email, user_status)
-        values (#{userName},#{userPassword},#{userEmail},#{userStatus},#{user})
+        values (#{userName},#{userPassword},#{userEmail},#{userStatus})
     </insert>
+
+    <update id="updateUserStatusByName" >
+        update user set user_status=#{status} where user_name=#{username}
+    </update>
 </mapper>

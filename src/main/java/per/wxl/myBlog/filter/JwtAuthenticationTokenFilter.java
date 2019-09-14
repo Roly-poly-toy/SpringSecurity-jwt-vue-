@@ -20,7 +20,8 @@ import java.io.IOException;
 /**
  * @Auther: wxl
  * @Date: 2019/9/9 17:59
- * @Description: 登录的用户访问接口时的过滤器 作用：取得header中的Authorization,值为包含用户信息的token
+ * @Description: 登录的用户访问接口时的过滤器 作用：取得header中的Authorization,值为包含用户信息的token,然后
+ * 存入SpringSecurity的上下文中
  */
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {

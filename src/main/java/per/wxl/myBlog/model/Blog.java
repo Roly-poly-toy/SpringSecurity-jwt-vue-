@@ -9,12 +9,34 @@ public class Blog {
   private Integer blogId;
   private String blogTitle;
   private String blogBody;
-  private long blogDiscussCount;
-  private long blogViews;
+  private Integer blogDiscussCount;
+  private Integer blogViews;
   private boolean blogState;
   private Date blogTime;
+  private Integer userId;  //方便插入
   private User user;
   private List<Tag> tags;
+
+  public Blog() {
+  }
+
+  public Blog(String blogTitle, String blogBody, Integer blogDiscussCount, Integer blogViews, boolean blogState, Date blogTime, Integer userId) {
+    this.blogTitle = blogTitle;
+    this.blogBody = blogBody;
+    this.blogDiscussCount = blogDiscussCount;
+    this.blogViews = blogViews;
+    this.blogState = blogState;
+    this.blogTime = blogTime;
+    this.userId = userId;
+  }
+
+  public Integer getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
 
   public Date getBlogTime() {
     return blogTime;
@@ -66,23 +88,21 @@ public class Blog {
   }
 
 
-  public long getBlogDiscussCount() {
+  public Integer getBlogDiscussCount() {
     return blogDiscussCount;
   }
 
-  public void setBlogDiscussCount(long blogDiscussCount) {
+  public void setBlogDiscussCount(Integer blogDiscussCount) {
     this.blogDiscussCount = blogDiscussCount;
   }
 
-
-  public long getBlogViews() {
+  public Integer getBlogViews() {
     return blogViews;
   }
 
-  public void setBlogViews(long blogViews) {
+  public void setBlogViews(Integer blogViews) {
     this.blogViews = blogViews;
   }
-
 
   public boolean isBlogState() {
     return blogState;

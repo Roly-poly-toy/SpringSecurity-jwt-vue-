@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsUtils;
 import per.wxl.myBlog.filter.JwtAuthenticationTokenFilter;
 import per.wxl.myBlog.service.UserService;
@@ -78,7 +79,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .permitAll();
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-        http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationTokenFilter, LogoutFilter.class);
         //http.addFilterBefore(characterEncodingFilter,JwtAuthenticationTokenFilter.class);
         http.headers().cacheControl();
 

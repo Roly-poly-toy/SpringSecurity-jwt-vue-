@@ -21,4 +21,11 @@ public class DataCheckUtil {
         return true;
     }
 
+    public static boolean checkNotNegative(Integer[] array){
+        for(int i=0;i<array.length;i++){
+            if(array[i]<0) return false;
+        }
+        return true;
+    }
+
 }

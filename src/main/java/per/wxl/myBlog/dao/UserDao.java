@@ -1,5 +1,6 @@
 package per.wxl.myBlog.dao;
 
+import org.apache.ibatis.annotations.Param;
 import per.wxl.myBlog.model.User;
 
 /**
@@ -13,4 +14,6 @@ public interface UserDao {
     User getUserByEmail(String userEmail);
 
     void saveUser(User user);
+
+    void updateUserStatusByName(@Param("username") String username, @Param("status") boolean b);
 }

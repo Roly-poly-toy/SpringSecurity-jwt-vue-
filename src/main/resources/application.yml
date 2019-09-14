@@ -92,4 +92,7 @@ Email:
   expiredTime: 5
 
 
+logging:
+  level:
+    per.wxl.myBlog.dao: debug
 
