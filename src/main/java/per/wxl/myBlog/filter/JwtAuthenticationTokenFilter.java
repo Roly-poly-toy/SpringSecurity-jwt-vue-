@@ -2,15 +2,18 @@ package per.wxl.myBlog.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import per.wxl.myBlog.config.JwtConfig;
+import per.wxl.myBlog.config.MyAuthenticationFailureHandler;
 import per.wxl.myBlog.model.MyUserDetails;
 import per.wxl.myBlog.service.UserService;
 
+import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +29,16 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
-    JwtConfig jwtConfig;
+   private JwtConfig jwtConfig;
 
     @Autowired
-    UserService userService;
+   private UserService userService;
+    @Autowired
+    private MyAuthenticationFailureHandler failureHandler;
+
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, AccountExpiredException {
         String token=request.getHeader(jwtConfig.getHeader());
         if(token!=null&&token.startsWith(jwtConfig.getPrefix())){
             MyUserDetails myUserDetails=userService.loadUserByToken(token);
@@ -42,7 +49,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-            }else throw new AccountExpiredException("账户登录过期，请重新登陆！");
+            }else{
+                failureHandler.onAuthenticationFailure(request,response,new AccountExpiredException("token过期，请重新登陆"));
+                return;
+            }
         }
         filterChain.doFilter(request,response);
     }

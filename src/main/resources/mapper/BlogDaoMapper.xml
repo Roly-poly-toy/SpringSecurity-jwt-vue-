@@ -7,12 +7,41 @@
 
     <insert id="saveBlog" useGeneratedKeys="true" keyProperty="blogId">
         insert into blog
-        values(#{blog.blogTitle},#{blog.blogBody},
-        #{blog.blogDiscussCount},#{blog.blogState},#{blog.userId},#{blog.blogTime})
+        values(null,#{blogTitle},#{blogBody},#{blogDiscussCount},#{blogViews},#{blogState},#{userId},#{blogTime})
     </insert>
 
     <insert id="saveBlogTag">
         insert into blog_tag values(#{blogId},#{tagId})
     </insert>
 
+    <resultMap id="blog_user_tag" type="Blog">
+        <id property="blogId" column="blog_id"></id>
+        <result property="blogTitle" column="blog_title"></result>
+        <result property="blogBody" column="blog_body"></result>
+        <result property="blogDiscussCount" column="blog_discussCount"></result>
+        <result property="blogViews" column="blog_views"></result>
+        <result property="blogState" column="blog_state"></result>
+        <result property="blogTime" column="blog_time"></result>
+        <association property="user" >
+            <id property="userId" column="user_id"></id>
+            <result property="userName" column="user_name"></result>
+        </association>
+        <collection property="tags" ofType="Tag">
+            <id property="tagId" column="tag_id"></id>
+            <result property="tagName" column="tag_name"></result>
+        </collection>
+    </resultMap>
+    <select id="getAllBlog" resultMap="blog_user_tag">
+        select a.*,user_name,d.tag_id,tag_name  from blog a,user b,blog_tag c,tag d
+        where a.user_id=b.user_id and a.blog_id=c.blog_id and c.tag_id=d.tag_id
+        and a.blog_state=1
+        order by blog_time desc
+    </select>
+
+    <select id="getBlogById" resultMap="blog_user_tag">
+         select a.*,user_name,d.tag_id,tag_name  from blog a,user b,blog_tag c,tag d
+        where a.user_id=b.user_id and a.blog_id=c.blog_id and c.tag_id=d.tag_id
+        and a.blog_id=#{blogId}
+
+    </select>
 </mapper>

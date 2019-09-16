@@ -20,10 +20,15 @@ import java.io.IOException;
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        String str="";
-        if(e.getMessage().equals("Bad credentials")) str="用户名与密码不匹配";
-        else if(e.getMessage().equals("User is disabled")) str="用户已登录";
-        Result result=new Result(400,str);
+        System.out.println(e.getClass());
+        Result result;
+        if(e.getMessage().equals("Bad credentials")){
+            result=new Result(202,"用户名与密码不匹配");
+        }
+        else if(e.getMessage().equals("User is disabled")){
+            result=new Result(203,"用户已登录");
+        }
+        else result=new Result(204,"用户已过期，请重新登录");
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }

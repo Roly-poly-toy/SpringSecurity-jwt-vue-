@@ -20,4 +20,8 @@
     <update id="updateUserStatusByName" >
         update user set user_status=#{status} where user_name=#{username}
     </update>
+
+    <select id="getUserById" resultType="User">
+        select * from user where user_id=#{userId}
+    </select>
 </mapper>

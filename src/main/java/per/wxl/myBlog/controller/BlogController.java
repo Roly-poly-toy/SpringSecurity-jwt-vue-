@@ -1,10 +1,9 @@
 package per.wxl.myBlog.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import per.wxl.myBlog.model.Blog;
 import per.wxl.myBlog.model.Result;
 import per.wxl.myBlog.service.BlogService;
 import per.wxl.myBlog.service.TagService;
@@ -34,8 +33,24 @@ public class BlogController {
         }else if(!tagService.checkTagIsExist(tagsId)){
             return new Result(201,"服务器已更新，不存在此标签，请刷新");
         }else{
-            blogService.sendBlog(userId,title,body,tagsId);
-            return new Result(200,"发表成功");
+            Blog blog=blogService.sendBlog(userId,title,body,tagsId);
+            return new Result(200,"发表成功",blog.getBlogId());
         }
+    }
+
+    @GetMapping("/getAllBlog")
+    public Result getAllBlog(Integer pageNum){
+        if(pageNum==null||!DataCheckUtil.checkNotNegative(pageNum))
+            return new Result(201,"页数不能为负数");
+        PageInfo<Blog> pageInfo=blogService.getAllBlog(pageNum);
+        return new Result(200,"查询成功",pageInfo);
+    }
+
+    @GetMapping("/getBlogById")
+    public Result getBlogById(Integer blogId){
+        if(blogId==null||!DataCheckUtil.checkNotNegative(blogId))
+            return new Result(201,"博客Id不能为负数");
+        Blog blog=blogService.getBlogById(blogId);
+        return new Result(200,"查询博客成功",blog);
     }
 }

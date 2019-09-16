@@ -15,12 +15,13 @@ import java.util.List;
  */
 public class MyUserDetails extends User {
     private String userPhoto;
-
+    private Integer userId;
     private List<String> roles;
     public MyUserDetails(per.wxl.myBlog.model.User user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUserName(), user.getUserPassword(), user.isUserStatus(), true, true
                 , true, authorities);
         this.userPhoto=user.getUserPhoto();
+        this.userId=user.getUserId();
     }
 
     public MyUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
@@ -44,5 +45,13 @@ public class MyUserDetails extends User {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

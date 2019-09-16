@@ -46,7 +46,9 @@ public class JwtTokenUtil {
 
     public String getUsernameFromToken(String authToken) {
         Claims claims=getClaimsFromToken(authToken);
-        return (String) claims.get("username");
+        if(claims==null) return  null;
+        else return (String) claims.get("username");
+
     }
 
     private Claims getClaimsFromToken(String token){

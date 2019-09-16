@@ -96,3 +96,7 @@ logging:
   level:
     per.wxl.myBlog.dao: debug
 
+pagehelper:
+  reasonable: true
+  helper-dialect: mysql
+  page-size-zero: true

@@ -16,4 +16,6 @@ public interface UserDao {
     void saveUser(User user);
 
     void updateUserStatusByName(@Param("username") String username, @Param("status") boolean b);
+
+    User getUserById(Integer userId);
 }
