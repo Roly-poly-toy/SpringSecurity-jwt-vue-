@@ -1,6 +1,9 @@
 package per.wxl.myBlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +41,7 @@ public class Blog {
     this.userId = userId;
   }
 
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
   public Date getBlogTime() {
     return blogTime;
   }

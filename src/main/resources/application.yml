@@ -4,7 +4,7 @@ spring:
     druid:
       username: root
       password: 123456
-      url: jdbc:mysql://192.168.202.129:3306/myBlog?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+      url: jdbc:mysql://192.168.202.129:3306/myBlog?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 5
       min-idle: 5
@@ -78,8 +78,7 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    lazy-loading-enabled: true
-    aggressive-lazy-loading: false
+
 
 jwt:
   time: 43200

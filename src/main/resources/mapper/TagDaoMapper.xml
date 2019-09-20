@@ -12,5 +12,9 @@
         select * from tag where tag_id=#{tagId}
     </select>
 
+    <select id="getTagByBlogId" resultType="Tag">
+        select tag.tag_id,tag_name from tag,blog_tag where blog_tag.tag_id=tag.tag_id
+        and blog_id=#{blogId}
+    </select>
 
 </mapper>

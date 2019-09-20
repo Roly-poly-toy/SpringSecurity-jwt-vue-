@@ -9,6 +9,9 @@ import per.wxl.myBlog.service.BlogService;
 import per.wxl.myBlog.service.TagService;
 import per.wxl.myBlog.utils.DataCheckUtil;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @Auther: wxl
  * @Date: 2019/9/14 23:35
@@ -39,11 +42,10 @@ public class BlogController {
     }
 
     @GetMapping("/getAllBlog")
-    public Result getAllBlog(Integer pageNum){
-        if(pageNum==null||!DataCheckUtil.checkNotNegative(pageNum))
-            return new Result(201,"页数不能为负数");
-        PageInfo<Blog> pageInfo=blogService.getAllBlog(pageNum);
-        return new Result(200,"查询成功",pageInfo);
+    public Result getAllBlog(Date blogTime){
+
+        List<Blog> blogs=blogService.getAllBlog(blogTime);
+        return new Result(200,"查询成功",blogs);
     }
 
     @GetMapping("/getBlogById")

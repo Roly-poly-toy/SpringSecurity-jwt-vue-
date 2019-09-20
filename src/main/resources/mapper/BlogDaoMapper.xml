@@ -26,16 +26,17 @@
             <id property="userId" column="user_id"></id>
             <result property="userName" column="user_name"></result>
         </association>
-        <collection property="tags" ofType="Tag">
-            <id property="tagId" column="tag_id"></id>
-            <result property="tagName" column="tag_name"></result>
+        <collection property="tags" ofType="Tag" javaType="java.util.List" column="blog_id" select="per.wxl.myBlog.dao.TagDao.getTagByBlogId">
         </collection>
     </resultMap>
-    <select id="getAllBlog" resultMap="blog_user_tag">
-        select a.*,user_name,d.tag_id,tag_name  from blog a,user b,blog_tag c,tag d
-        where a.user_id=b.user_id and a.blog_id=c.blog_id and c.tag_id=d.tag_id
+    <select id="getAllBlog" resultMap="blog_user_tag" parameterType="java.util.Date">
+        select a.*,user_name from blog a,user b
+        where a.user_id=b.user_id
         and a.blog_state=1
-        order by blog_time desc
+        <if test="blogTime!=null">
+            and blog_time &lt; #{blogTime}
+        </if>
+        order by blog_time desc limit 5
     </select>
 
     <select id="getBlogById" resultMap="blog_user_tag">
@@ -43,5 +44,9 @@
         where a.user_id=b.user_id and a.blog_id=c.blog_id and c.tag_id=d.tag_id
         and a.blog_id=#{blogId}
 
+    </select>
+
+    <select id="getSomeBlog" resultType="blog">
+        select * from blog where blog_time &lt; #{blogTime}
     </select>
 </mapper>

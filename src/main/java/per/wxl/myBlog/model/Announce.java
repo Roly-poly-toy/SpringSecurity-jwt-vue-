@@ -1,6 +1,8 @@
 package per.wxl.myBlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Announce {
@@ -36,7 +38,7 @@ public class Announce {
     this.announceBody = announceBody;
   }
 
-
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
   public Date getAnnounceTime() {
     return announceTime;
   }

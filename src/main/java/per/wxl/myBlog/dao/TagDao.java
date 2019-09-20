@@ -13,4 +13,6 @@ public interface TagDao {
     List<Tag> getAllTags();
 
     Tag getTagById(Integer tagId);
+
+    List<Tag> getTagByBlogId(Integer blogId);
 }

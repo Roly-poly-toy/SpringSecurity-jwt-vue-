@@ -1,6 +1,8 @@
 package per.wxl.myBlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Message {
@@ -35,7 +37,7 @@ public class Message {
     this.messageBody = messageBody;
   }
 
-
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
   public Date getMessageTime() {
     return messageTime;
   }

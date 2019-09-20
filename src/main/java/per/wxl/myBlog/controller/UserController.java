@@ -51,7 +51,7 @@ public class UserController {
             }else return new Result(200,"注册成功，请前往登录");
         }
     }
-    @CrossOrigin
+
     @PostMapping("/sendEmail")
     public Result sendEmail(String email){
         if(!DataCheckUtil.checkStringNull(email)||!DataCheckUtil.checkEmail(email))

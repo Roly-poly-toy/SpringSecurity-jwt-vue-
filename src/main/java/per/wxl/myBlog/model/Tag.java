@@ -1,7 +1,10 @@
 package per.wxl.myBlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
+
 
 public class Tag {
 

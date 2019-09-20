@@ -25,9 +25,17 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
     UserService userService;
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        String username=((MyUserDetails)authentication.getPrincipal()).getUsername();
-        userService.updateUserStatusByName(username,true);
-        Result result=new Result(200,"成功退出");
+        Result result=new Result();
+        if(authentication!=null){
+            String username=((MyUserDetails)authentication.getPrincipal()).getUsername();
+            userService.updateUserStatusByName(username,true);
+            result.setCode(200);
+            result.setMessage("成功退出");
+
+        }else {
+            result.setCode(201);
+            result.setMessage("请先登录");
+        }
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }

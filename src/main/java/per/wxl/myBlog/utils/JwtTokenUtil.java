@@ -42,6 +42,7 @@ public class JwtTokenUtil {
         redisTemplate.opsForValue().set(JwtConfig.REDIS_TOKEN_KEY_PREFIX+username
         ,jwtConfig.getPrefix()+token,jwtConfig.getTime(), TimeUnit.SECONDS);
         return token;
+        
     }
 
     public String getUsernameFromToken(String authToken) {

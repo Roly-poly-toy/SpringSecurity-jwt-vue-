@@ -3,6 +3,7 @@ package per.wxl.myBlog.dao;
 import org.apache.ibatis.annotations.Param;
 import per.wxl.myBlog.model.Blog;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +16,9 @@ public interface BlogDao {
 
     void saveBlogTag(@Param("blogId") Integer blogId,@Param("tagId") Integer tagId);
 
-    List<Blog> getAllBlog();
+    List<Blog> getAllBlog(Date blogTime);
 
     Blog getBlogById(Integer blogId);
+
+    List<Blog> getSomeBlog(Date blogTime);
 }

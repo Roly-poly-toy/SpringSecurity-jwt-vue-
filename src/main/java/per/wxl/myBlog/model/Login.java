@@ -1,6 +1,8 @@
 package per.wxl.myBlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Login {
@@ -26,7 +28,7 @@ public class Login {
     this.loginIp = loginIp;
   }
 
-
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
   public Date getLoginTime() {
     return loginTime;
   }

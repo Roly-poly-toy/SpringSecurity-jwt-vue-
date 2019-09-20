@@ -53,11 +53,11 @@ public class BlogService {
         return blog;
     }
 
-    public PageInfo<Blog> getAllBlog(Integer pageNum) {
-        PageHelper.startPage(pageNum,10);
-        List<Blog> blogs=blogDao.getAllBlog();
-        PageInfo<Blog> pageInfo=new PageInfo<>(blogs);
-        return pageInfo;
+    public List<Blog> getAllBlog(Date blogTime) {
+
+        List<Blog> blogs=blogDao.getAllBlog(blogTime);
+
+        return blogs;
     }
     @Cacheable
     public Blog getBlogById(Integer blogId) {
