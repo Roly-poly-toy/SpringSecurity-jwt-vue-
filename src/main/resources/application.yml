@@ -4,7 +4,7 @@ spring:
     druid:
       username: root
       password: 123456
-      url: jdbc:mysql://192.168.202.129:3306/myBlog?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
+      url: jdbc:mysql://192.168.202.129:3306/myBlog?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&allowMultiQueries=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 5
       min-idle: 5
@@ -42,6 +42,7 @@ spring:
         login-username: admin
         # 登录密码
         login-password: 123456
+
 
   #redis缓存配置
   redis:

@@ -49,4 +49,10 @@
     <select id="getSomeBlog" resultType="blog">
         select * from blog where blog_time &lt; #{blogTime}
     </select>
+
+    <update id="updateBlogViews" parameterType="java.util.Map">
+        <foreach collection="MyMap.entrySet()" separator=";" item="value" index="key">
+            update blog set blog_views=#{value} where blog_id=#{key}
+        </foreach>
+    </update>
 </mapper>

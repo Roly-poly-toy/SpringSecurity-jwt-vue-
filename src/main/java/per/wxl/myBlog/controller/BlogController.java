@@ -1,14 +1,17 @@
 package per.wxl.myBlog.controller;
 
-import com.github.pagehelper.PageInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import per.wxl.myBlog.model.Blog;
+import per.wxl.myBlog.model.MyUserDetails;
 import per.wxl.myBlog.model.Result;
 import per.wxl.myBlog.service.BlogService;
 import per.wxl.myBlog.service.TagService;
 import per.wxl.myBlog.utils.DataCheckUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -49,10 +52,17 @@ public class BlogController {
     }
 
     @GetMapping("/getBlogById")
-    public Result getBlogById(Integer blogId){
+    public Result getBlogById(Integer blogId,Integer userId){
         if(blogId==null||!DataCheckUtil.checkNotNegative(blogId))
             return new Result(201,"博客Id不能为负数");
-        Blog blog=blogService.getBlogById(blogId);
-        return new Result(200,"查询博客成功",blog);
+        if(userId==null||!DataCheckUtil.checkNotNegative(userId))
+            return new Result(201,"用户无效");
+        try {
+            Blog blog=blogService.getBlogById(blogId,userId);
+            return new Result(200,"查询博客成功",blog);
+        }catch (RuntimeException e){
+            return new Result(201,e.getMessage());
+        }
+
     }
 }

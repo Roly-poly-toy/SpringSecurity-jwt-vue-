@@ -5,10 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.context.junit4.SpringRunner;
 import per.wxl.myBlog.dao.BlogDao;
 import per.wxl.myBlog.dao.UserDao;
+import per.wxl.myBlog.dao.UserViewsDao;
 import per.wxl.myBlog.model.Blog;
+import per.wxl.myBlog.model.UserViews;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +25,8 @@ public class MyBlogApplicationTests {
 	UserDao userDao;
 	@Autowired
 	BlogDao blogDao;
+	@Autowired
+	UserViewsDao userViewsDao;
 	@Test
 	public void contextLoads() {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
@@ -48,6 +53,10 @@ public class MyBlogApplicationTests {
         List<Blog> blogs=blogDao.getSomeBlog(date);
         System.out.println(blogs);
     }
-
+    @Test
+	public void test3(){
+		UserViews userViews=userViewsDao.getUserViewsById(1);
+		System.out.println(userViews);
+	}
 
 }

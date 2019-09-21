@@ -5,6 +5,7 @@ import per.wxl.myBlog.model.Blog;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: wxl
@@ -21,4 +22,6 @@ public interface BlogDao {
     Blog getBlogById(Integer blogId);
 
     List<Blog> getSomeBlog(Date blogTime);
+
+    void updateBlogViews(@Param("MyMap") Map<Integer,Integer> map);
 }

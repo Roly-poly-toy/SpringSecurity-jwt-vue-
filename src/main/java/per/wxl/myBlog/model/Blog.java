@@ -15,6 +15,7 @@ public class Blog {
   private Integer blogDiscussCount;
   private Integer blogViews;
   private boolean blogState;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date blogTime;
   private Integer userId;  //方便插入
   private User user;
@@ -41,7 +42,7 @@ public class Blog {
     this.userId = userId;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
+
   public Date getBlogTime() {
     return blogTime;
   }

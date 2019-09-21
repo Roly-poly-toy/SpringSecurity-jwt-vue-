@@ -3,6 +3,7 @@ package per.wxl.myBlog.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,8 @@ import org.springframework.data.redis.serializer.*;
 @Configuration
 @EnableCaching
 public class RedisConfig {
+    public static final String USER_BLOG_VIEWS="user:view:total:";
+    public static final String BLOG_TOTAL_COUNT="blog:view:total:";
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory connectionFactory){
         RedisTemplate<String,Object> redisTemplate=new RedisTemplate<>();
