@@ -12,7 +12,15 @@ public class Reply {
   private Date replyTime;
   private User user;
   private Reply reply;
+  private Discuss discuss;
 
+  public Discuss getDiscuss() {
+    return discuss;
+  }
+
+  public void setDiscuss(Discuss discuss) {
+    this.discuss = discuss;
+  }
 
   public Integer getReplyId() {
     return replyId;

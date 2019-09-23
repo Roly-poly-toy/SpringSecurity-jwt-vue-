@@ -55,8 +55,6 @@ public class BlogController {
     public Result getBlogById(Integer blogId,Integer userId){
         if(blogId==null||!DataCheckUtil.checkNotNegative(blogId))
             return new Result(201,"博客Id不能为负数");
-        if(userId==null||!DataCheckUtil.checkNotNegative(userId))
-            return new Result(201,"用户无效");
         try {
             Blog blog=blogService.getBlogById(blogId,userId);
             return new Result(200,"查询博客成功",blog);

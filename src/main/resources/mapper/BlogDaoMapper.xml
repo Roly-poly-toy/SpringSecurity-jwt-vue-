@@ -55,4 +55,8 @@
             update blog set blog_views=#{value} where blog_id=#{key}
         </foreach>
     </update>
+
+    <update id="updateBlogDiscussCount">
+        update blog set blog_discussCount=blog_discussCount+#{newVar} where blog_id=#{blogId}
+    </update>
 </mapper>

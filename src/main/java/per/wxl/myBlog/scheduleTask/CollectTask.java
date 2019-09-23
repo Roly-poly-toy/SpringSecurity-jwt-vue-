@@ -36,7 +36,9 @@ public class CollectTask {
         int start=RedisConfig.USER_BLOG_VIEWS.length();
         keys.forEach(key->{
             Set members = redisTemplate.opsForSet().members(key);
-            list.add(new UserViews(Integer.valueOf(key.substring(start)), JSON.toJSONString(members)));
+            String values=JSON.toJSONString(members);
+            System.out.println(values);
+            list.add(new UserViews(Integer.valueOf(key.substring(start)), values));
         });
         if(list.size()!=0) userViewsDao.saveUserViews(list);
 

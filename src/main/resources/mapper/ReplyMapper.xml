@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.wxl.myBlog.dao.ReplyDao">
+    <resultMap id="ReplyUserReply" type="reply">
+        <id property="replyId" column="reply_id"></id>
+        <result property="replyBody" column="reply_body"></result>
+        <result property="replyTime" column="reply_time"></result>
+        <result property="user.userId" column="user_id"></result>
+        <result property="user.userName" column="user_name"></result>
+        <result property="reply.replyId" column="parent_id"></result>
+        <result property="discuss.discussId" column="discuss_id"></result>
+    </resultMap>
+
+
+    <select id="getReplyByDiscussId" resultMap="ReplyUserReply">
+        select reply.*,user_name from reply,user
+        where reply.user_id=user.user_id
+        and discuss_id=#{discussId}
+        order by reply_time asc
+    </select>
+    
+    <select id="getReplyById" resultMap="ReplyUserReply">
+        select reply.*,user_name from reply,user
+        where reply.user_id=user.user_id
+        and reply_id=#{replyId}
+    </select>
+    <insert id="saveReply">
+        insert into reply values (null,#{replyBody},#{replyTime},#{user.userId},#{discuss.discussId},#{reply.replyId})
+    </insert>
+
+</mapper>

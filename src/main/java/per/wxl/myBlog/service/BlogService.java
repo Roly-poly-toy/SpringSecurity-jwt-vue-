@@ -19,11 +19,10 @@ import per.wxl.myBlog.model.Blog;
 import per.wxl.myBlog.model.Tag;
 import per.wxl.myBlog.model.User;
 import per.wxl.myBlog.model.UserViews;
+import per.wxl.myBlog.utils.JsonUtil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Auther: wxl
@@ -78,25 +77,28 @@ public class BlogService {
     public Blog getBlogById(Integer blogId,Integer userId) throws RuntimeException{
         Blog blog=blogDao.getBlogById(blogId);
         if(blog==null) throw new RuntimeException("博客不存在，或已被删除");
-
-        if(!redisTemplate.hasKey(RedisConfig.USER_BLOG_VIEWS+userId)){
-            UserViews userViews=userViewsDao.getUserViewsById(userId);
-            if(userViews!=null){
-                String blogIds=userViews.getBlogs();
-                redisTemplate.opsForSet().add(RedisConfig.USER_BLOG_VIEWS+userId,
-                        JSON.parseObject(blogIds, Set.class));
+        if(userId!=null){
+            if(!redisTemplate.hasKey(RedisConfig.USER_BLOG_VIEWS+userId)){
+                UserViews userViews=userViewsDao.getUserViewsById(userId);
+                if(userViews!=null){
+                    String blogIds=userViews.getBlogs();
+                    redisTemplate.opsForSet().add(RedisConfig.USER_BLOG_VIEWS+userId,
+                            JsonUtil.String2Array(blogIds));
+                }
             }
+
+            //如果插入成功返回1，即该用户没有访问该博客 那么就让他的缓存访问量加一
+            if(redisTemplate.opsForSet().add(RedisConfig.USER_BLOG_VIEWS+userId,blogId)==1){
+                redisTemplate.expire(RedisConfig.USER_BLOG_VIEWS+userId,600, TimeUnit.SECONDS);
+                if(!redisTemplate.hasKey(RedisConfig.BLOG_TOTAL_COUNT+blogId))
+                    redisTemplate.opsForValue().set(RedisConfig.BLOG_TOTAL_COUNT+blogId,blog.getBlogViews());
+                redisTemplate.expire(RedisConfig.BLOG_TOTAL_COUNT+blogId,600,TimeUnit.SECONDS);
+                redisTemplate.opsForValue().increment(RedisConfig.BLOG_TOTAL_COUNT+blogId,1);
+                blog.setBlogViews(blog.getBlogViews()+1);
+            }
+
+
         }
-
-        //如果插入成功返回1，即该用户没有访问该博客 那么就让他的缓存访问量加一
-        if(redisTemplate.opsForSet().add(RedisConfig.USER_BLOG_VIEWS+userId,blogId)==1){
-            if(!redisTemplate.hasKey(RedisConfig.BLOG_TOTAL_COUNT+blogId))
-                redisTemplate.opsForValue().set(RedisConfig.BLOG_TOTAL_COUNT+blogId,blog.getBlogViews());
-            redisTemplate.opsForValue().increment(RedisConfig.BLOG_TOTAL_COUNT+blogId,1);
-            blog.setBlogViews(blog.getBlogViews()+1);
-        }
-
-
 
 
         return blog;

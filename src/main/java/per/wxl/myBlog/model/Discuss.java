@@ -13,7 +13,24 @@ public class Discuss {
   private Date discussTime;
   private User user;
   private List<Reply> replies;
+  private Blog blog;
+  private Integer discussReplyCount;
 
+  public Integer getDiscussReplyCount() {
+    return discussReplyCount;
+  }
+
+  public void setDiscussReplyCount(Integer discussReplyCount) {
+    this.discussReplyCount = discussReplyCount;
+  }
+
+  public Blog getBlog() {
+    return blog;
+  }
+
+  public void setBlog(Blog blog) {
+    this.blog = blog;
+  }
 
   public Integer getDiscussId() {
     return discussId;
@@ -31,7 +48,7 @@ public class Discuss {
     this.discussBody = discussBody;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
   public Date getDiscussTime() {
     return discussTime;
   }

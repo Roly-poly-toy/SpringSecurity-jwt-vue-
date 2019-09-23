@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.wxl.myBlog.dao.DiscussDao">
+    <resultMap id="DiscussUserReply" type="Discuss">
+        <id property="discussId" column="discuss_id"></id>
+        <result property="discussBody" column="discuss_body"></result>
+        <result property="discussTime" column="discuss_time"></result>
+        <result property="user.userId" column="user_id"></result>
+        <result property="user.userName" column="user_name"></result>
+        <result property="blog.blogId" column="blog_id"></result>
+        <result property="blog.blogTitle" column="blog_title"></result>
+        <result property="blog.blogTime" column="blog_time"></result>
+    </resultMap>
+
+    <sql id="DiscussUserBlog">
+        select discuss.*,user_name,blog_title,blog_time from discuss,user,blog
+        where discuss.user_id=user.user_id and discuss.blog_id=blog.blog_id
+    </sql>
+
+    <select id="getDiscussByBlogId" resultMap="DiscussUserReply">
+       <include refid="DiscussUserBlog"></include>
+        and discuss.blog_id=#{blogId} order by discuss_time asc
+    </select>
+
+    <insert id="saveDiscuss">
+        insert into discuss values(null,#{discussBody},#{discussTime},#{user.userId},#{blog.blogId},#{discussReplyCount})
+    </insert>
+
+    <select id="getDiscussById" resultMap="DiscussUserReply">
+       <include refid="DiscussUserBlog"></include>
+       and discuss_id=#{discussId}
+    </select>
+    <update id="updateReplyCount">
+        update discuss set discuss_replyCount=discuss_replyCount+#{i} where discuss_id=#{discussId}
+    </update>
+
+</mapper>
