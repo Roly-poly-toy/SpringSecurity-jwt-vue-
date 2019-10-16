@@ -3,11 +3,11 @@ package per.wxl.myBlog.config;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import per.wxl.myBlog.model.MyUserDetails;
 import per.wxl.myBlog.model.Result;
-import per.wxl.myBlog.model.User;
 import per.wxl.myBlog.service.UserService;
 import per.wxl.myBlog.utils.JwtTokenUtil;
 
@@ -32,12 +32,13 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Result result=new Result(200,"登陆成功");
-        MyUserDetails myUserDetails= (MyUserDetails) authentication.getPrincipal();
-        String username=myUserDetails.getUsername();
+        MyUserDetails user = (MyUserDetails) authentication.getPrincipal();
+        String username=user.getUsername();
         userService.updateUserStatusByName(username,false);
         Map<String,Object> map=new HashMap<>(2);
-        map.put("user",myUserDetails);
-        map.put("token","Bearer "+jwtTokenUtil.generateToken(myUserDetails));
+        map.put("userId",user.getUserId());
+        map.put("token","Bearer "+jwtTokenUtil.generateToken(user));
+        map.put("refreshToken",jwtTokenUtil.generateToken(username));
         result.setData(map);
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));

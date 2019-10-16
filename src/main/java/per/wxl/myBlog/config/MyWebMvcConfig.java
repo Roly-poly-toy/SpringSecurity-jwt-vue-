@@ -19,6 +19,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowCredentials(true)
                 .allowedMethods("GET","POST","DELETE","PUT")
+                .exposedHeaders("newToken")
                 .maxAge(3600);
     }
     @Bean

@@ -1,13 +1,20 @@
 package per.wxl.myBlog.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import per.wxl.myBlog.config.EmailConfig;
 import per.wxl.myBlog.model.Result;
+import per.wxl.myBlog.model.StatusCode;
 import per.wxl.myBlog.model.User;
 import per.wxl.myBlog.service.UserService;
 import per.wxl.myBlog.utils.DataCheckUtil;
+import per.wxl.myBlog.utils.JwtTokenUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Auther: wxl
@@ -24,6 +31,8 @@ public class UserController {
     RedisTemplate redisTemplate;
     @Autowired
     EmailConfig emailConfig;
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/hello")
     public String sayHello(){
@@ -65,5 +74,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/refreshToken")
+    public Result refreshToken(String refreshToken){
+        Map<String,String> data=new HashMap<>();
+        try {
+            data=jwtTokenUtil.refreshToken(refreshToken);
+        }catch (UsernameNotFoundException e){
+            return new Result(StatusCode.USERNOTFOUNT,"账号可能已被删除",null);
+        }catch (ExpiredJwtException e){
+            return new Result(StatusCode.REFRESHTOKENEXPIRED,"账号过期，请重新登录",null);
+        }
+        return new Result(200,"刷新token成功",data);
+    }
+    /* todo */
 
 }

@@ -15,4 +15,6 @@ public interface TagDao {
     Tag getTagById(Integer tagId);
 
     List<Tag> getTagByBlogId(Integer blogId);
+
+    void deleteTagByBlogId(Integer blogId);
 }

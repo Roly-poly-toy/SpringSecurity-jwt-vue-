@@ -12,6 +12,7 @@ public class StatusCode {
     public static final int NOTMATCH=203;//用户密码不匹配
     public static final int DISABLED=204; //用户已被枷锁
     public static final int EXPIRED=205; //TOLEN过期
+    public static final int REFRESHTOKENEXPIRED=206; //ResfreshTOLEN过期
     public static final int NOROLE=403;  //权限不足
     public static final int NOTFOUND=404; //找不到资源
     public static final int WEBERROR=500; //服务器内部错误

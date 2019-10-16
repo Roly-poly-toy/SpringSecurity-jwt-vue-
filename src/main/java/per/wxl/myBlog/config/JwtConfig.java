@@ -11,18 +11,27 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 @Component
 public class JwtConfig {
-    private Long time;
+    private Long expiredTime;
+    private Long refreshTime;
     public static final String REDIS_TOKEN_KEY_PREFIX="TOKEN_";
     private String secret;
     private String prefix;
     private String header;
 
-    public Long getTime() {
-        return time;
+    public Long getExpiredTime() {
+        return expiredTime;
     }
 
-    public void setTime(Long time) {
-        this.time = time;
+    public void setExpiredTime(Long expiredTime) {
+        this.expiredTime = expiredTime;
+    }
+
+    public Long getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(Long refreshTime) {
+        this.refreshTime = refreshTime;
     }
 
     public String getSecret() {

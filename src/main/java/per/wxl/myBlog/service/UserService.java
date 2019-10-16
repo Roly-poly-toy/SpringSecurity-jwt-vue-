@@ -61,15 +61,9 @@ public class UserService implements UserDetailsService {
         return new MyUserDetails(user,authorities);
     }
 
-    public MyUserDetails loadUserByToken(String token) {
-        String authToken=token.substring(jwtConfig.getPrefix().length());
+    public MyUserDetails loadUserByToken(String authToken) {
         String username=jwtTokenUtil.getUsernameFromToken(authToken);
-        if(username==null) return null;
         String redisToken= (String) redisTemplate.opsForValue().get(JwtConfig.REDIS_TOKEN_KEY_PREFIX+username);
-        if(redisToken==null||!redisToken.equals(token)){
-            userDao.updateUserStatusByName(username,true);  //更新用户状态，让用户可以重新登录
-            return null;
-        }
         List<String> roles=jwtTokenUtil.getRolesFromToken(authToken);
         List<SimpleGrantedAuthority> authorities=new ArrayList<>();
         for(String role:roles)

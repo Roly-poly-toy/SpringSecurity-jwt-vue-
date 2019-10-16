@@ -59,4 +59,12 @@
     <update id="updateBlogDiscussCount">
         update blog set blog_discussCount=blog_discussCount+#{newVar} where blog_id=#{blogId}
     </update>
+
+    <update id="updateBlog">
+        update blog set blog_title=#{blogTitle},blog_body=#{blogBody} where blog_id=#{blogId}
+    </update>
+
+    <update id="updateBlogStatus">
+        update blog set blog_state=#{i} where blog_id=#{blogId}
+    </update>
 </mapper>

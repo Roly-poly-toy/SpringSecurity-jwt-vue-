@@ -67,7 +67,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/user/register","/user/sendEmail","/blog/getAllBlog").permitAll()
+                .antMatchers("/user/register","/user/sendEmail","/blog/getAllBlog","/user/refreshToken").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

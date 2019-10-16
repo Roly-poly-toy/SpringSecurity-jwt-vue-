@@ -16,5 +16,7 @@
         select tag.tag_id,tag_name from tag,blog_tag where blog_tag.tag_id=tag.tag_id
         and blog_id=#{blogId}
     </select>
-
+    <delete id="deleteTagByBlogId">
+        delete from blog_tag where blog_id=#{blogId}
+    </delete>
 </mapper>

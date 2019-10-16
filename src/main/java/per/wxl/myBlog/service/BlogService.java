@@ -44,22 +44,17 @@ public class BlogService {
     private RedisTemplate redisTemplate;
 
 
-    public Blog sendBlog(Integer userId, String title, String body, Integer[] tagsId) {
+    public void sendBlog(Integer userId, String title, String body, Integer[] tagsId) {
         Blog blog=new Blog(title,body,0,0,true,new Date(),userId);
         blogDao.saveBlog(blog);
 
         User user=userDao.getUserById(userId);
         blog.setUser(user);
 
-        List<Tag> tags=new ArrayList<>();
 
         for(Integer tagId:tagsId){
             blogDao.saveBlogTag(blog.getBlogId(),tagId);
-            tags.add(tagDao.getTagById(tagId));
         }
-
-        blog.setTags(tags);
-        return blog;
     }
 
     public List<Blog> getAllBlog(Date blogTime) {
@@ -104,4 +99,25 @@ public class BlogService {
         return blog;
     }
 
+    public void editBlog(Integer blogId, Integer userId, String title, String body, Integer[] tagsId) {
+        Blog blog=blogDao.getBlogById(blogId);
+        if(blog==null)  throw new RuntimeException("博客或以被删除，请刷新");
+        if(!blog.getUser().getUserId().equals(userId)) throw  new RuntimeException("无权编辑不属于你的博客");
+        blog.setBlogTitle(title);
+        blog.setBlogBody(body);
+        blogDao.updateBlog(blog);
+        tagDao.deleteTagByBlogId(blogId);
+
+        for(Integer tagId:tagsId){
+            blogDao.saveBlogTag(blog.getBlogId(),tagId);
+        }
+    }
+
+    public void deleteBlogById(Integer blogId, Integer userId) {
+        Blog blog=blogDao.getBlogById(blogId);
+        if(blog==null) throw new RuntimeException("博客或以被删除，请刷新");
+        if(!blog.getUser().getUserId().equals(userId)) throw new RuntimeException("无权删除不属于你的博客");
+        blogDao.updateBlogStatus(blogId,0);
+        tagDao.deleteTagByBlogId(blogId);
+    }
 }

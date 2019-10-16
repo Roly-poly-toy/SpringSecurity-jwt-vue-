@@ -26,4 +26,8 @@ public interface BlogDao {
     void updateBlogViews(@Param("MyMap") Map<Integer,Integer> map);
 
     void updateBlogDiscussCount(@Param("blogId") Integer blogId, @Param("newVar") int i);
+
+    void updateBlog(Blog blog);
+
+    void updateBlogStatus(@Param("blogId") Integer blogId,@Param("i") int i);
 }

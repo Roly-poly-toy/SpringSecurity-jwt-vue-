@@ -14,13 +14,11 @@ import java.util.List;
  * @Description:
  */
 public class MyUserDetails extends User {
-    private String userPhoto;
     private Integer userId;
     private List<String> roles;
     public MyUserDetails(per.wxl.myBlog.model.User user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUserName(), user.getUserPassword(), user.isUserStatus(), true, true
                 , true, authorities);
-        this.userPhoto=user.getUserPhoto();
         this.userId=user.getUserId();
     }
 
@@ -28,13 +26,6 @@ public class MyUserDetails extends User {
         super(username, password, authorities);
     }
 
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
 
     public List<String> getRoles() {
         List<String> roles=new ArrayList<>();
